@@ -1,315 +1,58 @@
-<!DOCTYPE html>
 <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyDhU9Nouh8tDVFBpnDS2a24nVE-CFdAvv8",
-    authDomain: "daily-moment-blog.firebaseapp.com",
-    projectId: "daily-moment-blog",
-    storageBucket: "daily-moment-blog.firebasestorage.app",
-    messagingSenderId: "131295013073",
-    appId: "1:131295013073:web:dfbe2e6272a3e9b8863df0",
-    measurementId: "G-XM0FREXCSV"
-  };
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
-<html lang="vi">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Daily Photo Blog</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-<style>
-
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:'Poppins',sans-serif;
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  orderBy
 }
+from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
-body{
-  background:#081120;
-  color:white;
-  padding:40px 8%;
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL
 }
+from "https://www.gstatic.com/firebasejs/12.15.0/firebase-storage.js";
 
-h1{
-  text-align:center;
-  font-size:48px;
-  color:#5ea2ff;
-  margin-bottom:10px;
-}
 
-.subtitle{
-  text-align:center;
-  color:#8ea6cc;
-  margin-bottom:50px;
-}
+// FIREBASE CONFIG
 
-/* CALENDAR */
+const firebaseConfig = {
 
-.calendar{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
-  gap:15px;
-}
+  apiKey: "AIzaSyDhU9Nouh8tDVFBpnDS2a24nVE-CFdAvv8",
 
-.month,
-.day-box{
-  background:#101b2f;
-  border:1px solid rgba(255,255,255,0.05);
-  padding:22px;
-  border-radius:18px;
-  text-align:center;
-  cursor:pointer;
-  transition:0.3s;
-  font-weight:600;
-}
+  authDomain: "daily-moment-blog.firebaseapp.com",
 
-.month:hover,
-.day-box:hover{
-  background:#1d4ed8;
-  transform:translateY(-4px);
-}
+  projectId: "daily-moment-blog",
 
-.days-container{
-  margin-top:20px;
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(80px,1fr));
-  gap:12px;
-}
+  storageBucket: "daily-moment-blog.firebasestorage.app",
 
-/* UPLOAD */
+  messagingSenderId: "131295013073",
 
-.upload-box{
-  background:#101b2f;
-  border-radius:24px;
-  padding:35px;
-  margin:50px 0;
-  text-align:center;
-  border:2px dashed #28456d;
-}
+  appId: "1:131295013073:web:dfbe2e6272a3e9b8863df0",
 
-.upload-box h2{
-  margin-bottom:20px;
-}
+  measurementId: "G-XM0FREXCSV"
 
-.caption-input{
-  margin-top:18px;
-  width:80%;
-  padding:14px;
-  border:none;
-  border-radius:12px;
-  outline:none;
-  background:#18263d;
-  color:white;
-  font-size:15px;
-}
+};
 
-button{
-  margin-top:22px;
-  padding:13px 30px;
-  border:none;
-  border-radius:30px;
-  background:#2563eb;
-  color:white;
-  cursor:pointer;
-  font-weight:600;
-}
 
-/* GALLERY */
+// INIT
 
-.gallery{
-  display:flex;
-  flex-direction:column;
-  gap:30px;
-}
+const app = initializeApp(firebaseConfig);
 
-.card{
-  background:#101b2f;
-  border-radius:20px;
-  padding:20px;
-}
+const db = getFirestore(app);
 
-.date{
-  color:#5ea2ff;
-  font-size:22px;
-  margin-bottom:20px;
-  font-weight:600;
-}
+const storage = getStorage(app);
 
-.post{
-  margin-bottom:40px;
-}
 
-.caption{
-  background:#18263d;
-  padding:14px;
-  border-radius:12px;
-  margin-bottom:14px;
-  line-height:1.7;
-}
-
-/* IMAGE GRID */
-
-.album-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:8px;
-}
-
-.album-grid img{
-  width:100%;
-  height:250px;
-  object-fit:cover;
-  border-radius:12px;
-  cursor:pointer;
-  transition:0.3s;
-}
-
-.album-grid img:hover{
-  transform:scale(1.02);
-}
-
-.album-grid img:only-child{
-  grid-column:span 2;
-  height:420px;
-}
-
-/* FULLSCREEN */
-
-.modal{
-  display:none;
-  position:fixed;
-  left:0;
-  top:0;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,0.9);
-  justify-content:center;
-  align-items:center;
-  z-index:999;
-}
-
-.modal.active{
-  display:flex;
-}
-
-.modal img{
-  max-width:90%;
-  max-height:90%;
-  border-radius:14px;
-}
-
-@media(max-width:768px){
-
-  body{
-    padding:25px 5%;
-  }
-
-  h1{
-    font-size:34px;
-  }
-
-  .caption-input{
-    width:100%;
-  }
-
-  .album-grid{
-    grid-template-columns:1fr;
-  }
-
-}
-
-</style>
-</head>
-
-<body>
-
-<h1>My Daily Moments</h1>
-
-<p class="subtitle">
-  Blog lưu giữ khoảnh khắc mỗi ngày ✨
-</p>
-
-<!-- CALENDAR -->
-
-<div class="calendar">
-
-  <div class="month" data-month="1">JAN</div>
-  <div class="month" data-month="2">FEB</div>
-  <div class="month" data-month="3">MAR</div>
-  <div class="month" data-month="4">APR</div>
-  <div class="month" data-month="5">MAY</div>
-  <div class="month" data-month="6">JUN</div>
-  <div class="month" data-month="7">JUL</div>
-  <div class="month" data-month="8">AUG</div>
-  <div class="month" data-month="9">SEP</div>
-  <div class="month" data-month="10">OCT</div>
-  <div class="month" data-month="11">NOV</div>
-  <div class="month" data-month="12">DEC</div>
-
-</div>
-
-<div class="days-container" id="daysContainer"></div>
-
-<!-- UPLOAD -->
-
-<div class="upload-box">
-
-  <h2>Đăng Album Hôm Nay</h2>
-
-  <input
-    type="file"
-    id="imageInput"
-    multiple
-    accept="image/*"
-  >
-
-  <br>
-
-  <input
-    type="text"
-    id="captionInput"
-    class="caption-input"
-    placeholder="Viết caption..."
-  >
-
-  <br>
-
-  <button onclick="addPhoto()">
-    Đăng Album
-  </button>
-
-</div>
-
-<!-- GALLERY -->
-
-<div class="gallery" id="gallery"></div>
-
-<!-- MODAL -->
-
-<div class="modal" id="modal" onclick="closeImage()">
-
-  <img id="modalImg">
-
-</div>
-
-<script>
+// DATA
 
 const albums = {};
 
@@ -355,8 +98,6 @@ function showDays(month){
 
     dayBox.innerHTML = day;
 
-    // highlight ngày có ảnh
-
     if(albums[key]){
 
       dayBox.style.border =
@@ -379,7 +120,7 @@ function showDays(month){
 
 // ADD PHOTO
 
-async function addPhoto(){
+window.addPhoto = async function(){
 
   const imageInput =
     document.getElementById("imageInput");
@@ -393,6 +134,7 @@ async function addPhoto(){
   if(files.length === 0){
 
     alert("Vui lòng chọn ảnh!");
+
     return;
 
   }
@@ -400,6 +142,7 @@ async function addPhoto(){
   if(files.length > 20){
 
     alert("Chỉ được đăng tối đa 20 ảnh!");
+
     return;
 
   }
@@ -415,40 +158,32 @@ async function addPhoto(){
   const key =
     `${year}-${month}-${day}`;
 
-  // tạo ngày
+  const imageUrls = [];
 
-  if(!albums[key]){
+  // UPLOAD ALL IMAGES
 
-    albums[key] = [];
+  for(const file of files){
+
+    const fileName =
+      Date.now() + "-" + file.name;
+
+    const storageRef =
+      ref(storage, "albums/" + fileName);
+
+    await uploadBytes(storageRef, file);
+
+    const downloadURL =
+      await getDownloadURL(storageRef);
+
+    imageUrls.push(downloadURL);
 
   }
 
-  // đọc ảnh đúng cách
+  // SAVE FIRESTORE
 
-  const imagePromises =
-    files.map(file=>{
+  const postData = {
 
-      return new Promise(resolve=>{
-
-        const reader =
-          new FileReader();
-
-        reader.onload = e=>{
-
-          resolve(e.target.result);
-
-        };
-
-        reader.readAsDataURL(file);
-
-      });
-
-    });
-
-  const images =
-    await Promise.all(imagePromises);
-
-  const post = {
+    dateKey: key,
 
     uploadTime:
       now.getTime(),
@@ -460,11 +195,24 @@ async function addPhoto(){
       captionInput.value || "Không có caption",
 
     images:
-      images
+      imageUrls
 
   };
 
-  albums[key].push(post);
+  await addDoc(
+    collection(db, "posts"),
+    postData
+  );
+
+  // LOCAL RENDER
+
+  if(!albums[key]){
+
+    albums[key] = [];
+
+  }
+
+  albums[key].push(postData);
 
   renderAll();
 
@@ -472,7 +220,43 @@ async function addPhoto(){
 
   captionInput.value = "";
 
+  alert("Đăng album thành công!");
+
+};
+
+
+// LOAD POSTS
+
+async function loadPosts(){
+
+  const q =
+    query(
+      collection(db, "posts"),
+      orderBy("uploadTime", "asc")
+    );
+
+  const querySnapshot =
+    await getDocs(q);
+
+  querySnapshot.forEach(doc=>{
+
+    const post = doc.data();
+
+    if(!albums[post.dateKey]){
+
+      albums[post.dateKey] = [];
+
+    }
+
+    albums[post.dateKey].push(post);
+
+  });
+
+  renderAll();
+
 }
+
+loadPosts();
 
 
 // RENDER ALL
@@ -521,8 +305,6 @@ function renderDay(key){
 
   card.appendChild(date);
 
-  // sort cũ -> mới
-
   albums[key]
   .sort((a,b)=>
     a.uploadTime - b.uploadTime
@@ -534,8 +316,6 @@ function renderDay(key){
       document.createElement("div");
 
     postDiv.className = "post";
-
-    // caption
 
     const caption =
       document.createElement("div");
@@ -549,8 +329,6 @@ function renderDay(key){
     `;
 
     postDiv.appendChild(caption);
-
-    // images
 
     const grid =
       document.createElement("div");
@@ -597,7 +375,9 @@ function showAlbum(key){
   if(!albums[key]){
 
     gallery.innerHTML = `
+
       <div class="card">
+
         <div class="date">
           📅 ${key}
         </div>
@@ -605,7 +385,9 @@ function showAlbum(key){
         <div class="caption">
           Chưa có ảnh trong ngày này
         </div>
+
       </div>
+
     `;
 
     return;
@@ -619,7 +401,7 @@ function showAlbum(key){
 
 // OPEN IMAGE
 
-function openImage(src){
+window.openImage = function(src){
 
   const modal =
     document.getElementById("modal");
@@ -636,7 +418,7 @@ function openImage(src){
 
 // CLOSE IMAGE
 
-function closeImage(){
+window.closeImage = function(){
 
   document
     .getElementById("modal")
@@ -645,6 +427,3 @@ function closeImage(){
 }
 
 </script>
-
-</body>
-</html>
