@@ -83,11 +83,6 @@
       gap:12px;
     }
 
-    .has-photo{
-      border:2px solid #5ea2ff;
-      box-shadow:0 0 12px rgba(94,162,255,0.5);
-    }
-
     /* UPLOAD */
 
     .upload-box{
@@ -168,7 +163,7 @@
     }
 
     .post-block{
-      margin-bottom:35px;
+      margin-bottom:40px;
     }
 
     .caption{
@@ -186,7 +181,7 @@
     .album-grid{
       display:grid;
       grid-template-columns:repeat(2,1fr);
-      gap:6px;
+      gap:8px;
     }
 
     .album-grid img{
@@ -234,7 +229,7 @@
     .modal img{
       max-width:90%;
       max-height:90%;
-      border-radius:18px;
+      border-radius:16px;
     }
 
     footer{
@@ -342,7 +337,7 @@
 
   <div class="gallery" id="gallery"></div>
 
-  <!-- MODAL -->
+  <!-- FULLSCREEN -->
 
   <div class="modal" id="modal" onclick="closeImage()">
 
@@ -392,6 +387,9 @@
 
       for(let day = 1; day <= totalDays; day++){
 
+        const key =
+          `2026-${month}-${day}`;
+
         const dayBox =
           document.createElement("div");
 
@@ -399,12 +397,12 @@
 
         dayBox.innerHTML = day;
 
-        const key =
-          `2026-${month}-${day}`;
+        // highlight ngày có ảnh
 
         if(albums[key]){
 
-          dayBox.classList.add("has-photo");
+          dayBox.style.border =
+            "2px solid #5ea2ff";
 
         }
 
@@ -479,17 +477,23 @@
       const key =
         `${year}-${month}-${day}`;
 
+      // tạo ngày mới
+
       if(!albums[key]){
 
         albums[key] = [];
 
       }
 
+      // object bài đăng
+
       const post = {
 
-        uploadTime: now.getTime(),
+        uploadTime:
+          now.getTime(),
 
-        time: fullTime,
+        time:
+          fullTime,
 
         caption:
           captionInput.value || "Không có caption",
@@ -511,6 +515,8 @@
 
           loaded++;
 
+          // load xong toàn bộ
+
           if(loaded === files.length){
 
             albums[key].push(post);
@@ -531,7 +537,7 @@
 
     }
 
-    // RENDER ALL
+    // RENDER ALL ALBUMS
 
     function renderAllAlbums(){
 
@@ -539,6 +545,8 @@
         document.getElementById("gallery");
 
       gallery.innerHTML = "";
+
+      // sort ngày cũ -> mới
 
       const sortedKeys =
         Object.keys(albums)
@@ -576,6 +584,8 @@
 
       card.appendChild(date);
 
+      // sort bài đăng theo thời gian cũ -> mới
+
       albums[key]
       .sort((a,b)=>
         a.uploadTime - b.uploadTime
@@ -587,6 +597,8 @@
           document.createElement("div");
 
         block.className = "post-block";
+
+        // caption
 
         const caption =
           document.createElement("div");
@@ -600,6 +612,8 @@
         `;
 
         block.appendChild(caption);
+
+        // grid ảnh
 
         const grid =
           document.createElement("div");
@@ -633,7 +647,7 @@
 
     }
 
-    // SHOW ALBUM BY DAY
+    // SHOW SINGLE DAY
 
     function showAlbum(month, day){
 
@@ -644,6 +658,8 @@
 
       const key =
         `2026-${month}-${day}`;
+
+      // chưa có ảnh
 
       if(!albums[key]){
 
