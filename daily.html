@@ -1,529 +1,418 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Daily Photo Blog</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>Daily Photo Blog</title>
 
-  <style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family:'Poppins',sans-serif;
-    }
+<style>
 
-    body{
-      background:#081120;
-      color:white;
-      min-height:100vh;
-      padding:40px 8%;
-    }
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
+}
 
-    h1{
-      text-align:center;
-      font-size:48px;
-      color:#5ea2ff;
-      margin-bottom:10px;
-    }
+body{
+  background:#081120;
+  color:white;
+  padding:40px 8%;
+}
 
-    .subtitle{
-      text-align:center;
-      color:#9db2d1;
-      margin-bottom:50px;
-      font-size:15px;
-    }
+h1{
+  text-align:center;
+  font-size:48px;
+  color:#5ea2ff;
+  margin-bottom:10px;
+}
 
-    /* CALENDAR */
+.subtitle{
+  text-align:center;
+  color:#8ea6cc;
+  margin-bottom:50px;
+}
 
-    .calendar-section{
-      margin-bottom:50px;
-    }
+/* CALENDAR */
 
-    .calendar-title{
-      text-align:center;
-      margin-bottom:25px;
-      color:#5ea2ff;
-      font-size:28px;
-    }
+.calendar{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+  gap:15px;
+}
 
-    .calendar{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
-      gap:15px;
-    }
+.month,
+.day-box{
+  background:#101b2f;
+  border:1px solid rgba(255,255,255,0.05);
+  padding:22px;
+  border-radius:18px;
+  text-align:center;
+  cursor:pointer;
+  transition:0.3s;
+  font-weight:600;
+}
 
-    .month,
-    .day-box{
-      background:#101b2f;
-      border:1px solid rgba(255,255,255,0.05);
-      padding:22px;
-      border-radius:18px;
-      text-align:center;
-      font-weight:600;
-      color:#dce8ff;
-      cursor:pointer;
-      transition:0.3s;
-    }
+.month:hover,
+.day-box:hover{
+  background:#1d4ed8;
+  transform:translateY(-4px);
+}
 
-    .month:hover,
-    .day-box:hover{
-      background:#1d4ed8;
-      transform:translateY(-4px);
-    }
+.days-container{
+  margin-top:20px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(80px,1fr));
+  gap:12px;
+}
 
-    .days-container{
-      margin-top:20px;
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(80px,1fr));
-      gap:12px;
-    }
+/* UPLOAD */
 
-    /* UPLOAD */
+.upload-box{
+  background:#101b2f;
+  border-radius:24px;
+  padding:35px;
+  margin:50px 0;
+  text-align:center;
+  border:2px dashed #28456d;
+}
 
-    .upload-box{
-      background:#101b2f;
-      border-radius:24px;
-      padding:35px;
-      margin-bottom:50px;
-      text-align:center;
-      border:2px dashed #28456d;
-      box-shadow:0 10px 25px rgba(0,0,0,0.25);
-    }
+.upload-box h2{
+  margin-bottom:20px;
+}
 
-    .upload-box h2{
-      margin-bottom:20px;
-      color:#dce8ff;
-    }
+.caption-input{
+  margin-top:18px;
+  width:80%;
+  padding:14px;
+  border:none;
+  border-radius:12px;
+  outline:none;
+  background:#18263d;
+  color:white;
+  font-size:15px;
+}
 
-    input[type="file"]{
-      color:white;
-      margin-top:10px;
-    }
+button{
+  margin-top:22px;
+  padding:13px 30px;
+  border:none;
+  border-radius:30px;
+  background:#2563eb;
+  color:white;
+  cursor:pointer;
+  font-weight:600;
+}
 
-    .caption-input{
-      margin-top:18px;
-      width:80%;
-      padding:14px;
-      border:none;
-      border-radius:12px;
-      outline:none;
-      background:#18263d;
-      color:white;
-      font-size:15px;
-    }
+/* GALLERY */
 
-    .caption-input::placeholder{
-      color:#90a4c5;
-    }
+.gallery{
+  display:flex;
+  flex-direction:column;
+  gap:30px;
+}
 
-    button{
-      margin-top:22px;
-      padding:13px 30px;
-      border:none;
-      border-radius:30px;
-      background:#1d4ed8;
-      color:white;
-      cursor:pointer;
-      font-size:15px;
-      font-weight:500;
-      transition:0.3s;
-    }
+.card{
+  background:#101b2f;
+  border-radius:20px;
+  padding:20px;
+}
 
-    button:hover{
-      background:#2563eb;
-      transform:translateY(-2px);
-    }
+.date{
+  color:#5ea2ff;
+  font-size:22px;
+  margin-bottom:20px;
+  font-weight:600;
+}
 
-    /* GALLERY */
+.post{
+  margin-bottom:40px;
+}
 
-    .gallery{
-      display:flex;
-      flex-direction:column;
-      gap:30px;
-    }
+.caption{
+  background:#18263d;
+  padding:14px;
+  border-radius:12px;
+  margin-bottom:14px;
+  line-height:1.7;
+}
 
-    .card{
-      background:#101b2f;
-      border-radius:20px;
-      overflow:hidden;
-      border:1px solid rgba(255,255,255,0.05);
-      padding:20px;
-    }
+/* IMAGE GRID */
 
-    .date{
-      color:#5ea2ff;
-      font-size:20px;
-      margin-bottom:20px;
-      font-weight:600;
-    }
+.album-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px;
+}
 
-    .post-block{
-      margin-bottom:40px;
-    }
+.album-grid img{
+  width:100%;
+  height:250px;
+  object-fit:cover;
+  border-radius:12px;
+  cursor:pointer;
+  transition:0.3s;
+}
 
-    .caption{
-      color:#dce6f8;
-      font-size:15px;
-      line-height:1.7;
-      padding:14px;
-      background:#18263d;
-      border-radius:12px;
-      margin-bottom:14px;
-    }
+.album-grid img:hover{
+  transform:scale(1.02);
+}
 
-    /* ALBUM GRID */
+.album-grid img:only-child{
+  grid-column:span 2;
+  height:420px;
+}
 
-    .album-grid{
-      display:grid;
-      grid-template-columns:repeat(2,1fr);
-      gap:8px;
-    }
+/* FULLSCREEN */
 
-    .album-grid img{
-      width:100%;
-      height:240px;
-      object-fit:cover;
-      border-radius:12px;
-      cursor:pointer;
-      transition:0.3s;
-    }
+.modal{
+  display:none;
+  position:fixed;
+  left:0;
+  top:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.9);
+  justify-content:center;
+  align-items:center;
+  z-index:999;
+}
 
-    .album-grid img:hover{
-      transform:scale(1.02);
-    }
+.modal.active{
+  display:flex;
+}
 
-    .album-grid img:only-child{
-      grid-column:span 2;
-      height:420px;
-    }
+.modal img{
+  max-width:90%;
+  max-height:90%;
+  border-radius:14px;
+}
 
-    .album-grid img:nth-child(3):last-child{
-      grid-column:span 2;
-    }
+@media(max-width:768px){
 
-    /* FULLSCREEN */
+  body{
+    padding:25px 5%;
+  }
 
-    .modal{
-      display:none;
-      position:fixed;
-      z-index:999;
-      left:0;
-      top:0;
-      width:100%;
-      height:100%;
-      background:rgba(0,0,0,0.92);
-      justify-content:center;
-      align-items:center;
-      padding:20px;
-    }
+  h1{
+    font-size:34px;
+  }
 
-    .modal.active{
-      display:flex;
-    }
+  .caption-input{
+    width:100%;
+  }
 
-    .modal img{
-      max-width:90%;
-      max-height:90%;
-      border-radius:16px;
-    }
+  .album-grid{
+    grid-template-columns:1fr;
+  }
 
-    footer{
-      text-align:center;
-      margin-top:70px;
-      color:#7f95b8;
-      font-size:14px;
-    }
+}
 
-    @media(max-width:768px){
-
-      body{
-        padding:25px 5%;
-      }
-
-      h1{
-        font-size:34px;
-      }
-
-      .caption-input{
-        width:100%;
-      }
-
-      .album-grid{
-        grid-template-columns:1fr;
-      }
-
-      .album-grid img{
-        height:260px;
-      }
-
-    }
-
-  </style>
+</style>
 </head>
 
 <body>
 
-  <h1>My Daily Moments</h1>
+<h1>My Daily Moments</h1>
 
-  <p class="subtitle">
-    Blog lưu giữ khoảnh khắc mỗi ngày ✨
-  </p>
+<p class="subtitle">
+  Blog lưu giữ khoảnh khắc mỗi ngày ✨
+</p>
 
-  <!-- CALENDAR -->
+<!-- CALENDAR -->
 
-  <section class="calendar-section">
+<div class="calendar">
 
-    <h2 class="calendar-title">
-      📅 Calendar 2026
-    </h2>
+  <div class="month" data-month="1">JAN</div>
+  <div class="month" data-month="2">FEB</div>
+  <div class="month" data-month="3">MAR</div>
+  <div class="month" data-month="4">APR</div>
+  <div class="month" data-month="5">MAY</div>
+  <div class="month" data-month="6">JUN</div>
+  <div class="month" data-month="7">JUL</div>
+  <div class="month" data-month="8">AUG</div>
+  <div class="month" data-month="9">SEP</div>
+  <div class="month" data-month="10">OCT</div>
+  <div class="month" data-month="11">NOV</div>
+  <div class="month" data-month="12">DEC</div>
 
-    <div class="calendar">
+</div>
 
-      <div class="month" data-month="1">JAN</div>
-      <div class="month" data-month="2">FEB</div>
-      <div class="month" data-month="3">MAR</div>
-      <div class="month" data-month="4">APR</div>
-      <div class="month" data-month="5">MAY</div>
-      <div class="month" data-month="6">JUN</div>
-      <div class="month" data-month="7">JUL</div>
-      <div class="month" data-month="8">AUG</div>
-      <div class="month" data-month="9">SEP</div>
-      <div class="month" data-month="10">OCT</div>
-      <div class="month" data-month="11">NOV</div>
-      <div class="month" data-month="12">DEC</div>
+<div class="days-container" id="daysContainer"></div>
 
-    </div>
+<!-- UPLOAD -->
 
-    <div class="days-container" id="daysContainer"></div>
+<div class="upload-box">
 
-  </section>
+  <h2>Đăng Album Hôm Nay</h2>
 
-  <!-- UPLOAD -->
+  <input
+    type="file"
+    id="imageInput"
+    multiple
+    accept="image/*"
+  >
 
-  <div class="upload-box">
+  <br>
 
-    <h2>Đăng Album Hôm Nay</h2>
+  <input
+    type="text"
+    id="captionInput"
+    class="caption-input"
+    placeholder="Viết caption..."
+  >
 
-    <input
-      type="file"
-      id="imageInput"
-      accept="image/*"
-      multiple
-    >
+  <br>
 
-    <br>
+  <button onclick="addPhoto()">
+    Đăng Album
+  </button>
 
-    <input
-      type="text"
-      id="captionInput"
-      class="caption-input"
-      placeholder="Viết caption cho lần đăng này..."
-    >
+</div>
 
-    <br>
+<!-- GALLERY -->
 
-    <button onclick="addPhoto()">
-      Đăng Album
-    </button>
+<div class="gallery" id="gallery"></div>
 
-  </div>
+<!-- MODAL -->
 
-  <!-- GALLERY -->
+<div class="modal" id="modal" onclick="closeImage()">
 
-  <div class="gallery" id="gallery"></div>
+  <img id="modalImg">
 
-  <!-- FULLSCREEN -->
+</div>
 
-  <div class="modal" id="modal" onclick="closeImage()">
+<script>
 
-    <img id="modalImg">
+const albums = {};
 
-  </div>
 
-  <footer>
-    © 2026 Daily Photo Blog
-  </footer>
+// MONTH CLICK
 
-  <script>
+document.querySelectorAll(".month")
+.forEach(month=>{
 
-    // DATABASE
+  month.onclick = ()=>{
 
-    const albums = {};
+    const monthNumber =
+      parseInt(month.dataset.month);
 
-    // MONTH CLICK
+    showDays(monthNumber);
 
-    const monthButtons =
-      document.querySelectorAll(".month");
+  };
 
-    monthButtons.forEach(button=>{
+});
 
-      button.addEventListener("click",()=>{
 
-        const month =
-          parseInt(button.dataset.month);
+// SHOW DAYS
 
-        showDays(month);
+function showDays(month){
 
-      });
+  const daysContainer =
+    document.getElementById("daysContainer");
 
-    });
+  daysContainer.innerHTML = "";
 
-    // SHOW DAYS
+  const totalDays =
+    new Date(2026, month, 0).getDate();
 
-    function showDays(month){
+  for(let day = 1; day <= totalDays; day++){
 
-      const daysContainer =
-        document.getElementById("daysContainer");
+    const key =
+      `2026-${month}-${day}`;
 
-      daysContainer.innerHTML = "";
+    const dayBox =
+      document.createElement("div");
 
-      const totalDays =
-        new Date(2026, month, 0).getDate();
+    dayBox.className = "day-box";
 
-      for(let day = 1; day <= totalDays; day++){
+    dayBox.innerHTML = day;
 
-        const key =
-          `2026-${month}-${day}`;
+    // highlight ngày có ảnh
 
-        const dayBox =
-          document.createElement("div");
+    if(albums[key]){
 
-        dayBox.className = "day-box";
-
-        dayBox.innerHTML = day;
-
-        // highlight ngày có ảnh
-
-        if(albums[key]){
-
-          dayBox.style.border =
-            "2px solid #5ea2ff";
-
-        }
-
-        dayBox.onclick = ()=>{
-
-          showAlbum(month, day);
-
-        };
-
-        daysContainer.appendChild(dayBox);
-
-      }
+      dayBox.style.border =
+        "2px solid #5ea2ff";
 
     }
 
-    // ADD PHOTO
+    dayBox.onclick = ()=>{
 
-    function addPhoto(){
+      showAlbum(key);
 
-      const imageInput =
-        document.getElementById("imageInput");
+    };
 
-      const captionInput =
-        document.getElementById("captionInput");
+    daysContainer.appendChild(dayBox);
 
-      const files =
-        imageInput.files;
+  }
 
-      if(files.length === 0){
+}
 
-        alert("Vui lòng chọn ảnh!");
-        return;
 
-      }
+// ADD PHOTO
 
-      if(files.length > 20){
+async function addPhoto(){
 
-        alert("Chỉ được đăng tối đa 20 ảnh!");
-        return;
+  const imageInput =
+    document.getElementById("imageInput");
 
-      }
+  const captionInput =
+    document.getElementById("captionInput");
 
-      const now = new Date();
+  const files =
+    Array.from(imageInput.files);
 
-      const year =
-        now.getFullYear();
+  if(files.length === 0){
 
-      const month =
-        now.getMonth() + 1;
+    alert("Vui lòng chọn ảnh!");
+    return;
 
-      const day =
-        now.getDate();
+  }
 
-      const hour =
-        now.getHours()
-        .toString()
-        .padStart(2,"0");
+  if(files.length > 20){
 
-      const minute =
-        now.getMinutes()
-        .toString()
-        .padStart(2,"0");
+    alert("Chỉ được đăng tối đa 20 ảnh!");
+    return;
 
-      const second =
-        now.getSeconds()
-        .toString()
-        .padStart(2,"0");
+  }
 
-      const fullTime =
-        `${hour}:${minute}:${second}`;
+  const now = new Date();
 
-      const key =
-        `${year}-${month}-${day}`;
+  const year = now.getFullYear();
 
-      // tạo ngày mới
+  const month = now.getMonth() + 1;
 
-      if(!albums[key]){
+  const day = now.getDate();
 
-        albums[key] = [];
+  const key =
+    `${year}-${month}-${day}`;
 
-      }
+  // tạo ngày
 
-      // object bài đăng
+  if(!albums[key]){
 
-      const post = {
+    albums[key] = [];
 
-        uploadTime:
-          now.getTime(),
+  }
 
-        time:
-          fullTime,
+  // đọc ảnh đúng cách
 
-        caption:
-          captionInput.value || "Không có caption",
+  const imagePromises =
+    files.map(file=>{
 
-        images: []
-
-      };
-
-      let loaded = 0;
-
-      Array.from(files).forEach(file=>{
+      return new Promise(resolve=>{
 
         const reader =
           new FileReader();
 
-        reader.onload = function(e){
+        reader.onload = e=>{
 
-          post.images.push(e.target.result);
-
-          loaded++;
-
-          // load xong toàn bộ
-
-          if(loaded === files.length){
-
-            albums[key].push(post);
-
-            renderAllAlbums();
-
-          }
+          resolve(e.target.result);
 
         };
 
@@ -531,189 +420,208 @@
 
       });
 
-      imageInput.value = "";
+    });
 
-      captionInput.value = "";
+  const images =
+    await Promise.all(imagePromises);
 
-    }
+  const post = {
 
-    // RENDER ALL ALBUMS
+    uploadTime:
+      now.getTime(),
 
-    function renderAllAlbums(){
+    time:
+      now.toLocaleTimeString("vi-VN"),
 
-      const gallery =
-        document.getElementById("gallery");
+    caption:
+      captionInput.value || "Không có caption",
 
-      gallery.innerHTML = "";
+    images:
+      images
 
-      // sort ngày cũ -> mới
+  };
 
-      const sortedKeys =
-        Object.keys(albums)
-        .sort((a,b)=>
-          new Date(a) - new Date(b)
-        );
+  albums[key].push(post);
 
-      sortedKeys.forEach(key=>{
+  renderAll();
 
-        createAlbumCard(key);
+  imageInput.value = "";
 
-      });
+  captionInput.value = "";
 
-    }
+}
 
-    // CREATE CARD
 
-    function createAlbumCard(key){
+// RENDER ALL
 
-      const gallery =
-        document.getElementById("gallery");
+function renderAll(){
 
-      const card =
-        document.createElement("div");
+  const gallery =
+    document.getElementById("gallery");
 
-      card.className = "card";
+  gallery.innerHTML = "";
 
-      const date =
-        document.createElement("div");
+  const sortedKeys =
+    Object.keys(albums)
+    .sort((a,b)=>
+      new Date(a) - new Date(b)
+    );
 
-      date.className = "date";
+  sortedKeys.forEach(key=>{
 
-      date.innerHTML =
-        `📅 ${key}`;
+    renderDay(key);
 
-      card.appendChild(date);
+  });
 
-      // sort bài đăng theo thời gian cũ -> mới
+}
 
-      albums[key]
-      .sort((a,b)=>
-        a.uploadTime - b.uploadTime
-      );
 
-      albums[key].forEach(post=>{
+// RENDER DAY
 
-        const block =
-          document.createElement("div");
+function renderDay(key){
 
-        block.className = "post-block";
+  const gallery =
+    document.getElementById("gallery");
 
-        // caption
+  const card =
+    document.createElement("div");
 
-        const caption =
-          document.createElement("div");
+  card.className = "card";
 
-        caption.className = "caption";
+  const date =
+    document.createElement("div");
 
-        caption.innerHTML = `
-          🕒 ${post.time}
-          <br><br>
-          ✨ ${post.caption}
-        `;
+  date.className = "date";
 
-        block.appendChild(caption);
+  date.innerHTML =
+    `📅 ${key}`;
 
-        // grid ảnh
+  card.appendChild(date);
 
-        const grid =
-          document.createElement("div");
+  // sort cũ -> mới
 
-        grid.className = "album-grid";
+  albums[key]
+  .sort((a,b)=>
+    a.uploadTime - b.uploadTime
+  );
 
-        post.images.forEach(src=>{
+  albums[key].forEach(post=>{
 
-          const img =
-            document.createElement("img");
+    const postDiv =
+      document.createElement("div");
 
-          img.src = src;
+    postDiv.className = "post";
 
-          img.onclick = ()=>{
+    // caption
 
-            openImage(src);
+    const caption =
+      document.createElement("div");
 
-          };
+    caption.className = "caption";
 
-          grid.appendChild(img);
+    caption.innerHTML = `
+      🕒 ${post.time}
+      <br><br>
+      ✨ ${post.caption}
+    `;
 
-        });
+    postDiv.appendChild(caption);
 
-        block.appendChild(grid);
+    // images
 
-        card.appendChild(block);
+    const grid =
+      document.createElement("div");
 
-      });
+    grid.className = "album-grid";
 
-      gallery.appendChild(card);
+    post.images.forEach(src=>{
 
-    }
+      const img =
+        document.createElement("img");
 
-    // SHOW SINGLE DAY
+      img.src = src;
 
-    function showAlbum(month, day){
+      img.onclick = ()=>{
 
-      const gallery =
-        document.getElementById("gallery");
+        openImage(src);
 
-      gallery.innerHTML = "";
+      };
 
-      const key =
-        `2026-${month}-${day}`;
+      grid.appendChild(img);
 
-      // chưa có ảnh
+    });
 
-      if(!albums[key]){
+    postDiv.appendChild(grid);
 
-        gallery.innerHTML = `
+    card.appendChild(postDiv);
 
-          <div class="card">
+  });
 
-            <div class="date">
-              📅 ${day}/${month}/2026
-            </div>
+  gallery.appendChild(card);
 
-            <div class="caption">
-              Chưa có ảnh nào trong ngày này
-            </div>
+}
 
-          </div>
 
-        `;
+// SHOW SINGLE DAY
 
-        return;
+function showAlbum(key){
 
-      }
+  const gallery =
+    document.getElementById("gallery");
 
-      createAlbumCard(key);
+  gallery.innerHTML = "";
 
-    }
+  if(!albums[key]){
 
-    // OPEN IMAGE
+    gallery.innerHTML = `
+      <div class="card">
+        <div class="date">
+          📅 ${key}
+        </div>
 
-    function openImage(src){
+        <div class="caption">
+          Chưa có ảnh trong ngày này
+        </div>
+      </div>
+    `;
 
-      const modal =
-        document.getElementById("modal");
+    return;
 
-      const modalImg =
-        document.getElementById("modalImg");
+  }
 
-      modalImg.src = src;
+  renderDay(key);
 
-      modal.classList.add("active");
+}
 
-    }
 
-    // CLOSE IMAGE
+// OPEN IMAGE
 
-    function closeImage(){
+function openImage(src){
 
-      document
-        .getElementById("modal")
-        .classList.remove("active");
+  const modal =
+    document.getElementById("modal");
 
-    }
+  const modalImg =
+    document.getElementById("modalImg");
 
-  </script>
+  modalImg.src = src;
+
+  modal.classList.add("active");
+
+}
+
+
+// CLOSE IMAGE
+
+function closeImage(){
+
+  document
+    .getElementById("modal")
+    .classList.remove("active");
+
+}
+
+</script>
 
 </body>
 </html>
