@@ -1,282 +1,627 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Daily Photo Blog</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>Daily Photo Blog</title>
 
-  <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family:'Poppins', sans-serif;
-    }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    body{
-      background:#081120;
-      color:white;
-      padding:40px 8%;
-    }
+<style>
 
-    h1{
-      text-align:center;
-      font-size:42px;
-      margin-bottom:10px;
-      color:#5ea2ff;
-    }
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
+}
 
-    .subtitle{
-      text-align:center;
-      color:#9db2d1;
-      margin-bottom:50px;
-    }
+body{
+  background:#081120;
+  color:white;
+  padding:40px 8%;
+}
 
-    .gallery{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-      gap:25px;
-    }
+h1{
+  text-align:center;
+  font-size:48px;
+  color:#5ea2ff;
+  margin-bottom:10px;
+}
 
-    .card{
-      background:#101b2f;
-      border-radius:18px;
-      overflow:hidden;
-      transition:0.3s;
-      border:1px solid rgba(255,255,255,0.05);
-    }
+.subtitle{
+  text-align:center;
+  color:#8ea6cc;
+  margin-bottom:50px;
+}
 
-    .card:hover{
-      transform:translateY(-5px);
-    }
+/* CALENDAR */
 
-    .card img{
-      width:100%;
-      height:300px;
-      object-fit:cover;
-    }
+.calendar{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+  gap:15px;
+}
 
-    .content{
-      padding:18px;
-    }
+.month,
+.day-box{
+  background:#101b2f;
+  border:1px solid rgba(255,255,255,0.05);
+  padding:22px;
+  border-radius:18px;
+  text-align:center;
+  cursor:pointer;
+  transition:0.3s;
+  font-weight:600;
+}
 
-    .date{
-      color:#5ea2ff;
-      font-size:14px;
-      margin-bottom:8px;
-    }
+.month:hover,
+.day-box:hover{
+  background:#1d4ed8;
+  transform:translateY(-4px);
+}
 
-    .caption{
-      color:#d7e3f7;
-      font-size:15px;
-    }
+.days-container{
+  margin-top:20px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(80px,1fr));
+  gap:12px;
+}
 
-    .upload-box{
-      background:#101b2f;
-      border-radius:20px;
-      padding:30px;
-      margin-bottom:50px;
-      text-align:center;
-      border:2px dashed #2c4c7a;
-    }
+/* UPLOAD */
 
-    .upload-box input{
-      margin-top:15px;
-      color:white;
-    }
+.upload-box{
+  background:#101b2f;
+  border-radius:24px;
+  padding:35px;
+  margin:50px 0;
+  text-align:center;
+  border:2px dashed #28456d;
+}
 
-    button{
-      margin-top:20px;
-      padding:12px 28px;
-      border:none;
-      border-radius:30px;
-      background:#1d4ed8;
-      color:white;
-      cursor:pointer;
-      font-size:15px;
-      transition:0.3s;
-    }
+.upload-box h2{
+  margin-bottom:20px;
+}
 
-    button:hover{
-      background:#2563eb;
-    }
+.caption-input{
+  margin-top:18px;
+  width:80%;
+  padding:14px;
+  border:none;
+  border-radius:12px;
+  outline:none;
+  background:#18263d;
+  color:white;
+  font-size:15px;
+}
 
-    footer{
-      text-align:center;
-      margin-top:60px;
-      color:#7f95b8;
-      font-size:14px;
-    }
-  </style>
+button{
+  margin-top:22px;
+  padding:13px 30px;
+  border:none;
+  border-radius:30px;
+  background:#2563eb;
+  color:white;
+  cursor:pointer;
+  font-weight:600;
+}
+
+/* GALLERY */
+
+.gallery{
+  display:flex;
+  flex-direction:column;
+  gap:30px;
+}
+
+.card{
+  background:#101b2f;
+  border-radius:20px;
+  padding:20px;
+}
+
+.date{
+  color:#5ea2ff;
+  font-size:22px;
+  margin-bottom:20px;
+  font-weight:600;
+}
+
+.post{
+  margin-bottom:40px;
+}
+
+.caption{
+  background:#18263d;
+  padding:14px;
+  border-radius:12px;
+  margin-bottom:14px;
+  line-height:1.7;
+}
+
+/* IMAGE GRID */
+
+.album-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px;
+}
+
+.album-grid img{
+  width:100%;
+  height:250px;
+  object-fit:cover;
+  border-radius:12px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.album-grid img:hover{
+  transform:scale(1.02);
+}
+
+.album-grid img:only-child{
+  grid-column:span 2;
+  height:420px;
+}
+
+/* FULLSCREEN */
+
+.modal{
+  display:none;
+  position:fixed;
+  left:0;
+  top:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.9);
+  justify-content:center;
+  align-items:center;
+  z-index:999;
+}
+
+.modal.active{
+  display:flex;
+}
+
+.modal img{
+  max-width:90%;
+  max-height:90%;
+  border-radius:14px;
+}
+
+@media(max-width:768px){
+
+  body{
+    padding:25px 5%;
+  }
+
+  h1{
+    font-size:34px;
+  }
+
+  .caption-input{
+    width:100%;
+  }
+
+  .album-grid{
+    grid-template-columns:1fr;
+  }
+
+}
+
+</style>
 </head>
 
 <body>
 
-  <h1>My Daily Moments</h1>
-  <p class="subtitle">
-    Blog đơn giản để lưu lại hình ảnh mỗi ngày ✨
-  </p>
+<h1>My Daily Moments</h1>
 
-  ```html
+<p class="subtitle">
+  Blog lưu giữ khoảnh khắc mỗi ngày ✨
+</p>
+
+<!-- CALENDAR -->
+
+<div class="calendar">
+
+  <div class="month" data-month="1">JAN</div>
+  <div class="month" data-month="2">FEB</div>
+  <div class="month" data-month="3">MAR</div>
+  <div class="month" data-month="4">APR</div>
+  <div class="month" data-month="5">MAY</div>
+  <div class="month" data-month="6">JUN</div>
+  <div class="month" data-month="7">JUL</div>
+  <div class="month" data-month="8">AUG</div>
+  <div class="month" data-month="9">SEP</div>
+  <div class="month" data-month="10">OCT</div>
+  <div class="month" data-month="11">NOV</div>
+  <div class="month" data-month="12">DEC</div>
+
+</div>
+
+<div class="days-container" id="daysContainer"></div>
+
+<!-- UPLOAD -->
+
+<div class="upload-box">
+
+  <h2>Đăng Album Hôm Nay</h2>
+
+  <input
+    type="file"
+    id="imageInput"
+    multiple
+    accept="image/*"
+  >
+
+  <br>
+
+  <input
+    type="text"
+    id="captionInput"
+    class="caption-input"
+    placeholder="Viết caption..."
+  >
+
+  <br>
+
+  <button onclick="addPhoto()">
+    Đăng Album
+  </button>
+
+</div>
+
+<!-- GALLERY -->
+
+<div class="gallery" id="gallery"></div>
+
+<!-- MODAL -->
+
+<div class="modal" id="modal" onclick="closeImage()">
+
+  <img id="modalImg">
+
+</div>
+
 <script>
 
-  function addPhoto(){
+const albums = {};
 
-    const imageInput = document.getElementById("imageInput");
-    const captionInput = document.getElementById("captionInput");
-    const gallery = document.getElementById("gallery");
 
-    const files = imageInput.files;
+// MONTH CLICK
 
-    // kiểm tra có chọn ảnh chưa
-    if(files.length === 0){
-      alert("Vui lòng chọn ảnh!");
-      return;
+document.querySelectorAll(".month")
+.forEach(month=>{
+
+  month.onclick = ()=>{
+
+    const monthNumber =
+      parseInt(month.dataset.month);
+
+    showDays(monthNumber);
+
+  };
+
+});
+
+
+// SHOW DAYS
+
+function showDays(month){
+
+  const daysContainer =
+    document.getElementById("daysContainer");
+
+  daysContainer.innerHTML = "";
+
+  const totalDays =
+    new Date(2026, month, 0).getDate();
+
+  for(let day = 1; day <= totalDays; day++){
+
+    const key =
+      `2026-${month}-${day}`;
+
+    const dayBox =
+      document.createElement("div");
+
+    dayBox.className = "day-box";
+
+    dayBox.innerHTML = day;
+
+    // highlight ngày có ảnh
+
+    if(albums[key]){
+
+      dayBox.style.border =
+        "2px solid #5ea2ff";
+
     }
 
-    // giới hạn 20 ảnh
-    if(files.length > 20){
-      alert("Chỉ được tải tối đa 20 ảnh!");
-      return;
-    }
+    dayBox.onclick = ()=>{
 
-    // lặp qua từng ảnh
-    Array.from(files).forEach(file => {
+      showAlbum(key);
 
-      const reader = new FileReader();
+    };
 
-      reader.onload = function(e){
+    daysContainer.appendChild(dayBox);
 
-        const card = document.createElement("div");
-        card.className = "card";
+  }
 
-        const today = new Date().toLocaleDateString("vi-VN");
+}
 
-        card.innerHTML = `
-          <div style="position:relative;">
 
-            <img src="${e.target.result}">
+// ADD PHOTO
 
-            <!-- nút xóa -->
-            <button 
-              onclick="deletePost(this)"
-              style="
-                position:absolute;
-                top:10px;
-                right:10px;
-                background:red;
-                width:40px;
-                height:40px;
-                border-radius:50%;
-                border:none;
-                color:white;
-                font-size:18px;
-                cursor:pointer;
-              ">
-              ×
-            </button>
+async function addPhoto(){
 
-          </div>
+  const imageInput =
+    document.getElementById("imageInput");
 
-          <div class="content">
-            <div class="date">${today}</div>
+  const captionInput =
+    document.getElementById("captionInput");
 
-            <div class="caption">
-              ${captionInput.value || "Không có caption"}
-            </div>
-          </div>
-        `;
+  const files =
+    Array.from(imageInput.files);
 
-        gallery.prepend(card);
-      };
+  if(files.length === 0){
 
-      reader.readAsDataURL(file);
+    alert("Vui lòng chọn ảnh!");
+    return;
+
+  }
+
+  if(files.length > 20){
+
+    alert("Chỉ được đăng tối đa 20 ảnh!");
+    return;
+
+  }
+
+  const now = new Date();
+
+  const year = now.getFullYear();
+
+  const month = now.getMonth() + 1;
+
+  const day = now.getDate();
+
+  const key =
+    `${year}-${month}-${day}`;
+
+  // tạo ngày
+
+  if(!albums[key]){
+
+    albums[key] = [];
+
+  }
+
+  // đọc ảnh đúng cách
+
+  const imagePromises =
+    files.map(file=>{
+
+      return new Promise(resolve=>{
+
+        const reader =
+          new FileReader();
+
+        reader.onload = e=>{
+
+          resolve(e.target.result);
+
+        };
+
+        reader.readAsDataURL(file);
+
+      });
 
     });
 
-    // reset input
-    imageInput.value = "";
-    captionInput.value = "";
-  }
+  const images =
+    await Promise.all(imagePromises);
 
-  // hàm xóa bài
-  function deletePost(button){
+  const post = {
 
-    const card = button.closest(".card");
+    uploadTime:
+      now.getTime(),
 
-    card.remove();
-  }
+    time:
+      now.toLocaleTimeString("vi-VN"),
 
-</script>
-```
+    caption:
+      captionInput.value || "Không có caption",
+
+    images:
+      images
+
+  };
+
+  albums[key].push(post);
+
+  renderAll();
+
+  imageInput.value = "";
+
+  captionInput.value = "";
+
+}
 
 
-  <!-- Gallery -->
-  <div class="gallery" id="gallery">
+// RENDER ALL
 
-    <!-- Sample Card -->
-    <div class="card">
-      <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1200&auto=format&fit=crop">
+function renderAll(){
 
-      <div class="content">
-        <div class="date">16/06/2026</div>
-        <div class="caption">
-          Một ngày bình yên 🌙
-        </div>
-      </div>
-    </div>
+  const gallery =
+    document.getElementById("gallery");
 
-  </div>
+  gallery.innerHTML = "";
 
-  <footer>
-    © 2026 Daily Photo Blog
-  </footer>
+  const sortedKeys =
+    Object.keys(albums)
+    .sort((a,b)=>
+      new Date(a) - new Date(b)
+    );
 
-  <script>
-    function addPhoto(){
+  sortedKeys.forEach(key=>{
 
-      const imageInput = document.getElementById("imageInput");
-      const captionInput = document.getElementById("captionInput");
-      const gallery = document.getElementById("gallery");
+    renderDay(key);
 
-      const file = imageInput.files[0];
+  });
 
-      if(!file){
-        alert("Vui lòng chọn ảnh!");
-        return;
-      }
+}
 
-      const reader = new FileReader();
 
-      reader.onload = function(e){
+// RENDER DAY
 
-        const card = document.createElement("div");
-        card.className = "card";
+function renderDay(key){
 
-        const today = new Date().toLocaleDateString("vi-VN");
+  const gallery =
+    document.getElementById("gallery");
 
-        card.innerHTML = `
-          <img src="${e.target.result}">
-          <div class="content">
-            <div class="date">${today}</div>
-            <div class="caption">
-              ${captionInput.value || "Không có caption"}
-            </div>
-          </div>
-        `;
+  const card =
+    document.createElement("div");
 
-        gallery.prepend(card);
+  card.className = "card";
 
-        imageInput.value = "";
-        captionInput.value = "";
+  const date =
+    document.createElement("div");
+
+  date.className = "date";
+
+  date.innerHTML =
+    `📅 ${key}`;
+
+  card.appendChild(date);
+
+  // sort cũ -> mới
+
+  albums[key]
+  .sort((a,b)=>
+    a.uploadTime - b.uploadTime
+  );
+
+  albums[key].forEach(post=>{
+
+    const postDiv =
+      document.createElement("div");
+
+    postDiv.className = "post";
+
+    // caption
+
+    const caption =
+      document.createElement("div");
+
+    caption.className = "caption";
+
+    caption.innerHTML = `
+      🕒 ${post.time}
+      <br><br>
+      ✨ ${post.caption}
+    `;
+
+    postDiv.appendChild(caption);
+
+    // images
+
+    const grid =
+      document.createElement("div");
+
+    grid.className = "album-grid";
+
+    post.images.forEach(src=>{
+
+      const img =
+        document.createElement("img");
+
+      img.src = src;
+
+      img.onclick = ()=>{
+
+        openImage(src);
+
       };
 
-      reader.readAsDataURL(file);
-    }
-  </script>
+      grid.appendChild(img);
+
+    });
+
+    postDiv.appendChild(grid);
+
+    card.appendChild(postDiv);
+
+  });
+
+  gallery.appendChild(card);
+
+}
+
+
+// SHOW SINGLE DAY
+
+function showAlbum(key){
+
+  const gallery =
+    document.getElementById("gallery");
+
+  gallery.innerHTML = "";
+
+  if(!albums[key]){
+
+    gallery.innerHTML = `
+      <div class="card">
+        <div class="date">
+          📅 ${key}
+        </div>
+
+        <div class="caption">
+          Chưa có ảnh trong ngày này
+        </div>
+      </div>
+    `;
+
+    return;
+
+  }
+
+  renderDay(key);
+
+}
+
+
+// OPEN IMAGE
+
+function openImage(src){
+
+  const modal =
+    document.getElementById("modal");
+
+  const modalImg =
+    document.getElementById("modalImg");
+
+  modalImg.src = src;
+
+  modal.classList.add("active");
+
+}
+
+
+// CLOSE IMAGE
+
+function closeImage(){
+
+  document
+    .getElementById("modal")
+    .classList.remove("active");
+
+}
+
+</script>
 
 </body>
 </html>
